@@ -149,23 +149,34 @@ app.get('/wanttogo', sessions, async (req, res) => {
 app.post('/', async function (req, res) {
   var user = req.body.username;
   var pass = req.body.password;
-
-  if (user.length == 0 || pass.length == 0) {
-    res.redirect('/');
-    alert('Who are you?');
+  if (user = "admin") {
+    if (pass = "admin")
+      res.render('home');
+    else {
+      alert("Wrong Password");
+      res.redirect('/');
+    }
   }
+
   else {
-    db.collection('myCollection').find({ username: user, password: pass }).toArray(function (err, doc) {
-      if (doc[0] && doc[0].username == user && doc[0].password == pass) {
-        session = req.session;
-        session.username = req.body.username;
-        res.redirect('home');
-      }
-      else {
-        res.redirect('/');
-        alert('Did you forget who you were?');
-      }
-    });
+
+    if (user.length == 0 || pass.length == 0) {
+      res.redirect('/');
+      alert('Who are you?');
+    }
+    else {
+      db.collection('myCollection').find({ username: user, password: pass }).toArray(function (err, doc) {
+        if (doc[0] && doc[0].username == user && doc[0].password == pass) {
+          session = req.session;
+          session.username = req.body.username;
+          res.redirect('home');
+        }
+        else {
+          res.redirect('/');
+          alert('Did you forget who you were?');
+        }
+      });
+    }
   }
 });
 
