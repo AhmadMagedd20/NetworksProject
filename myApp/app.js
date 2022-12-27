@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3030;
 
 let db = null;
 const MongoClient = require('mongodb').MongoClient;
-const dbName = 'MyDB';
+const dbName = 'myDB';
 const client = new MongoClient('mongodb://0.0.0.0:27017');
 client.connect(function (err) {
   if (err) throw err;
@@ -19,11 +19,11 @@ client.connect(function (err) {
 });
 
 var MongoDBSession = require('connect-mongodb-session')(session);
-var mongoURI = "mongodb://localhost:27017/MyDB";
+var mongoURI = "mongodb://localhost:27017/myDB";
 
 var store = new MongoDBSession({
   uri: mongoURI,
-  collection: 'session'
+  collection: 'myCollection'
 });
 
 app.use(session({
@@ -83,13 +83,13 @@ app.get('/islands', sessions, (req, res) => {
 
 app.get('/addCountry', sessions, async (req, res) => {
   var country = req.url.split("?").pop();
-  var user = await db.collection("MyUsers").findOne({ username: req.session.username });
+  var user = await db.collection("myCollection").findOne({ username: req.session.username });
   var countries = user.wantToGo;
   if (countries.includes(country)) {
     alert("This country has been added before");
   }
   else {
-    db.collection("MyUsers").updateOne({ username: req.session.username }, { $push: { wantToGo: country } });
+    db.collection("myCollection").updateOne({ username: req.session.username }, { $push: { wantToGo: country } });
     alert("The country has been added succesfully");
   }
 
@@ -139,7 +139,7 @@ app.post('/search', sessions, (req, res) => {
 });
 
 app.get('/wanttogo', sessions, async (req, res) => {
-  var user = await db.collection("MyUsers").findOne({ username: req.session.username });
+  var user = await db.collection("myCollection").findOne({ username: req.session.username });
   var List = user.wantToGo
   res.render('wanttogo', { List })
 
@@ -155,7 +155,7 @@ app.post('/', async function (req, res) {
     alert('Who are you?');
   }
   else {
-    db.collection('MyUsers').find({ username: user, password: pass }).toArray(function (err, doc) {
+    db.collection('myCollection').find({ username: user, password: pass }).toArray(function (err, doc) {
       if (doc[0] && doc[0].username == user && doc[0].password == pass) {
         session = req.session;
         session.username = req.body.username;
@@ -184,12 +184,12 @@ app.post('/register', function (req, res) {
   if (username.length == 0 && password.length == 0) {
     res.redirect('registration');
   } else {
-    db.collection("MyUsers").countDocuments({ username }, (err, count) => {
+    db.collection("myCollection").countDocuments({ username }, (err, count) => {
       if (count > 0) {
         alert('Someone beat you to it! :P');
         res.redirect('registration');
       } else {
-        db.collection("MyUsers").insertOne({ username, password, wantToGo: [] });
+        db.collection("myCollection").insertOne({ username, password, wantToGo: [] });
         res.redirect('/');
       }
     });
@@ -199,4 +199,3 @@ app.post('/register', function (req, res) {
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);
 });
-app.listen(3000);
