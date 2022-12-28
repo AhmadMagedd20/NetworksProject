@@ -2,44 +2,44 @@ var express = require('express');
 var path = require('path');
 var fs = require("fs");
 var app = express();
-var session = require('express-session');
+//var session = require('express-session');
 var alert = require('alert');
 const PORT = process.env.PORT || 3030;
 
 
 
-let db = null;
-const MongoClient = require('mongodb').MongoClient;
-const dbName = 'myDB';
-const client = new MongoClient('mongodb://0.0.0.0:27017');
-client.connect(function (err) {
-  if (err) throw err;
-  console.log('Connected successfully to server!');
-  db = client.db(dbName);
-});
+//let db = null;
+//const MongoClient = require('mongodb').MongoClient;
+//const dbName = 'myDB';
+//const client = new MongoClient('mongodb://0.0.0.0:27017');
+//client.connect(function (err) {
+// if (err) throw err;
+// console.log('Connected successfully to server!');
+// db = client.db(dbName);
+//});
 
-var MongoDBSession = require('connect-mongodb-session')(session);
-var mongoURI = "mongodb://localhost:27017/myDB";
+//var MongoDBSession = require('connect-mongodb-session')(session);
+//var mongoURI = "mongodb://localhost:27017/myDB";
 
-var store = new MongoDBSession({
-  uri: mongoURI,
-  collection: 'myCollection'
-});
+//var store = new MongoDBSession({
+//  uri: mongoURI,
+// collection: 'myCollection'
+//});
 
-app.use(session({
-  secret: 'secret', // a secret key to sign the session ID cookie
-  resave: false, // don't save the session if it was not modified
-  saveUninitialized: false, // don't create a session if there is no activity
+//app.use(session({
+//  secret: 'secret', // a secret key to sign the session ID cookie
+// resave: false, // don't save the session if it was not modified
+// saveUninitialized: false, // don't create a session if there is no activity
+// store
+//}));
 
-}));
-
-const sessions = (req, res, next) => {
-  if (session.username) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-}
+//const sessions = (req, res, next) => {
+// if (session.username) {
+//   next();
+// } else {
+//  res.redirect('/');
+//}
+//}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -49,39 +49,39 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/annapurna', sessions, (req, res) => {
+app.get('/annapurna', (req, res) => {
   res.render('annapurna')
 });
 
-app.get('/bali', sessions, (req, res) => {
+app.get('/bali', (req, res) => {
   res.render('bali')
 });
 
-app.get('/cities', sessions, (req, res) => {
+app.get('/cities', (req, res) => {
   res.render('cities')
 });
 
-app.get('/hiking', sessions, (req, res) => {
+app.get('/hiking', (req, res) => {
   res.render('hiking')
 });
 
-app.get('/home', sessions, (req, res) => {
+app.get('/home', (req, res) => {
   res.render('home')
 });
 
-app.get('/inca', sessions, (req, res) => {
+app.get('/inca', (req, res) => {
   res.render('inca')
 });
 
-app.get('/index', sessions, (req, res) => {
+app.get('/index', (req, res) => {
   res.render('index')
 });
 
-app.get('/islands', sessions, (req, res) => {
+app.get('/islands', (req, res) => {
   res.render('islands')
 });
 
-app.get('/addCountry', sessions, async (req, res) => {
+app.get('/addCountry', async (req, res) => {
   var country = req.url.split("?").pop();
   var user = await db.collection("myCollection").findOne({ username: req.session.username });
   var countries = user.wantToGo;
@@ -106,7 +106,7 @@ app.get('/', function (req, res) {
   }
 });
 
-app.get('/paris', sessions, (req, res) => {
+app.get('/paris', (req, res) => {
   res.render('paris')
 });
 
@@ -119,26 +119,26 @@ app.get('/registration', function (req, res) {
   }
 });
 
-app.get('/rome', sessions, (req, res) => {
+app.get('/rome', (req, res) => {
   res.render('rome')
 });
 
-app.get('/santorini', sessions, (req, res) => {
+app.get('/santorini', (req, res) => {
   res.render('santorini')
 });
 
-app.get('/searchresults', sessions, (req, res) => {
+app.get('/searchresults', (req, res) => {
   res.render('searchresults')
 });
 
-app.post('/search', sessions, (req, res) => {
+app.post('/search', (req, res) => {
   const countries = ["bali", "annapurna", "inca", "paris", "rome", "santorini"];
   const searchKey = req.body.Search;
   const results = countries.filter((element) => element.toLowerCase().includes(searchKey.toLowerCase()));
   res.render('searchresults', { results });
 });
 
-app.get('/wanttogo', sessions, async (req, res) => {
+app.get('/wanttogo', async (req, res) => {
   var user = await db.collection("myCollection").findOne({ username: req.session.username });
   var List = user.wantToGo
   res.render('wanttogo', { List })
@@ -180,10 +180,10 @@ app.post('/', async function (req, res) {
   }
 });
 
-app.get('/logout', function (req, res) {
-  req.session.destroy();
-  res.redirect('/');
-});
+//app.get('/logout', function (req, res) {
+//  req.session.destroy();
+//  res.redirect('/');
+//});
 
 
 
