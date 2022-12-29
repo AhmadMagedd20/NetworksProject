@@ -150,8 +150,10 @@ app.post('/', async function (req, res) {
   var user = req.body.username;
   var pass = req.body.password;
   if (user = "admin") {
-    if (pass = "admin")
+    if (pass = "admin") {
       res.render('home');
+      req.session.username = "admin"
+    }
     else {
       alert("Wrong Password");
       res.redirect('/');
@@ -210,3 +212,5 @@ app.post('/register', function (req, res) {
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);
 });
+
+app.listen(3000);
