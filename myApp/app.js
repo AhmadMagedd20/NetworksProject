@@ -30,7 +30,7 @@ app.use(session({
   secret: 'secret', // a secret key to sign the session ID cookie
   resave: false, // don't save the session if it was not modified
   saveUninitialized: false, // don't create a session if there is no activity
-  store
+  //store
 }));
 
 const sessions = (req, res, next) => {
@@ -149,9 +149,8 @@ app.get('/wanttogo', sessions, async (req, res) => {
 app.post('/', async function (req, res) {
   var user = req.body.username;
   var pass = req.body.password;
-  if (user = "admin") {
-    if (pass = "admin") {
-
+  if (user == "admin") {
+    if (pass == "admin") {
       res.render('home');
 
     }
