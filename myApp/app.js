@@ -30,7 +30,7 @@ app.use(session({
   secret: 'secret', // a secret key to sign the session ID cookie
   resave: false, // don't save the session if it was not modified
   saveUninitialized: false, // don't create a session if there is no activity
-  store
+  //store
 }));
 
 const sessions = (req, res, next) => {
