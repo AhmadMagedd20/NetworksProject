@@ -151,7 +151,7 @@ app.post('/', async function (req, res) {
   var pass = req.body.password;
   if (user = "admin") {
     if (pass = "admin") {
-      req.session.username = "admin";
+
       res.render('home');
 
     }
