@@ -30,7 +30,7 @@ app.use(session({
   secret: 'secret', // a secret key to sign the session ID cookie
   resave: false, // don't save the session if it was not modified
   saveUninitialized: false, // don't create a session if there is no activity
-  //store
+  store
 }));
 
 const sessions = (req, res, next) => {
@@ -86,11 +86,11 @@ app.get('/addCountry', sessions, async (req, res) => {
   var user = await db.collection("myCollection").findOne({ username: req.session.username });
   var countries = user.wantToGo;
   if (countries.includes(country)) {
-    alert("This country has been added before");
+    alert("One time is enough!");
   }
   else {
     db.collection("myCollection").updateOne({ username: req.session.username }, { $push: { wantToGo: country } });
-    alert("The country has been added succesfully");
+    alert("We hope you end up going!");
   }
 
   res.redirect(country);
