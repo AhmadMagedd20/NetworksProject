@@ -151,8 +151,9 @@ app.post('/', async function (req, res) {
   var pass = req.body.password;
   if (user == "admin") {
     if (pass == "admin") {
+      session = req.session;
+      session.username = user;
       res.render('home');
-
     }
     else {
       alert("Wrong Password");
