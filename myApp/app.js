@@ -132,10 +132,26 @@ app.get('/searchresults', sessions, (req, res) => {
 });
 
 app.post('/search', sessions, (req, res) => {
-  const countries = ["bali", "annapurna", "inca", "paris", "rome", "santorini"];
+  const countries = ["Bali Island", "Annapurna Circuit", "Inca Trail to Machu Picchu", "paris", "rome", "Santorini Island"];
   const searchKey = req.body.Search;
-  const results = countries.filter((element) => element.toLowerCase().includes(searchKey.toLowerCase()));
-  res.render('searchresults', { results });
+  if (searchKey.length == 0) {
+    const results = ["The search bar is Empty , please write smth to search for"];
+    res.render('searchresults', { results });
+  }
+  else {
+    const results = countries.filter((element) => element.toLowerCase().includes(searchKey.toLowerCase()));
+    for (let i = 0; i < results.length; i++) {
+      if (results[i] == "Bali Island")
+        results[i] = "bali";
+      else if (results[i] == "Annapurna Circuit")
+        results[i] = "annapurna";
+      else if (results[i] == "Inca Trail to Machu Picchu")
+        results[i] = "inca";
+      else if (results[i] == "Santorini Island")
+        results[i] = "santorini"
+    }
+    res.render('searchresults', { results });
+  }
 });
 
 app.get('/wanttogo', sessions, async (req, res) => {
@@ -153,6 +169,7 @@ app.post('/', async function (req, res) {
     if (pass == "admin") {
       session = req.session;
       session.username = user;
+      alert("You are Logged in !!")
       res.render('home');
     }
     else {
@@ -172,6 +189,7 @@ app.post('/', async function (req, res) {
         if (doc[0] && doc[0].username == user && doc[0].password == pass) {
           session = req.session;
           session.username = req.body.username;
+          alert("You are Logged in")
           res.redirect('home');
         }
         else {
@@ -182,6 +200,7 @@ app.post('/', async function (req, res) {
     }
   }
 });
+
 
 app.get('/logout', function (req, res) {
   req.session.destroy();
@@ -204,6 +223,7 @@ app.post('/register', function (req, res) {
         res.redirect('registration');
       } else {
         db.collection("myCollection").insertOne({ username, password, wantToGo: [] });
+        alert(" Account has been Successfully registered")
         res.redirect('/');
       }
     });
