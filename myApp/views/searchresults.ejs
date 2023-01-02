@@ -23,14 +23,7 @@
             padding: 10px;
         }
 
-        .buttons {
-            margin: center;
-            text-align: center;
-            font-size: 50px;
-            width: 300px;
-            height: 200px;
-
-        }
+        
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,14 +54,18 @@
     <div class="searchresults">
         <% if (results.length> 0) { %>
             <% for (let i=0; i < results.length; i++) { %>
-                <button class="buttons" onclick="location.href = '/<%=results[i]%>' " id="megz"
-                    class="btn btn-secondary ml-3">
-                    <%=results[i]%>
-                        <% } %>
-                            <% }else{ %>
-                                <p> Destination was not found <br>
-                                    Coming Soon</p>
-                                <%}%>
+                <% if (results[i]=="The search bar is Empty , please write smth to search for" ) { %>
+                    <p>The search bar is Empty , please write smth to search for</p>
+                    <%break %>
+                        <%}%>
+                            <button class="buttons" onclick="location.href = '/<%=results[i]%>' " id="megz"
+                                class="btn btn-secondary ml-3">
+                                <%=results[i]%>
+                                    <% } %>
+                                        <% }else{ %>
+                                            <p> Destination was not found <br>
+                                                Coming Soon</p>
+                                            <%}%>
 
     </div>
 </body>
